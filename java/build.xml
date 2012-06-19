@@ -1,0 +1,81 @@
+<project name="i5phpbridge" basedir="." default="main">
+    <property name="lib.dir"     value="lib"/>
+    <property name="src.dir"     value="src"/>
+    <property name="jsp.dir"     value="web"/>
+    <property name="build.dir"   value="build"/>
+    <property name="i5phpbridge.dir"   value="${build.dir}/i5phpbridge"/>
+    <property name="web.dir"   value="web/WEB-INF"/>
+    <property name="meta.dir"   value="web/META-INF"/>
+    <property name="i5phpbridgeweb.dir"   value="${i5phpbridge.dir}/WEB-INF"/>
+    <property name="i5phpbridgemeta.dir"   value="${i5phpbridge.dir}/META-INF"/>
+    <property name="classes.dir" value="${i5phpbridgeweb.dir}/classes"/>
+    <property name="war.dir"     value="${build.dir}/war"/>
+    <property name="prod.dir" value="config/prod"/>
+    <property name="test.dir" value="config/test"/>
+
+    <path id="classpath">
+        <fileset dir="${lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${i5phpbridge.dir}"/>
+        <mkdir dir="${i5phpbridgeweb.dir}"/>
+        <mkdir dir="${i5phpbridgemeta.dir}"/>
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" classpathref="classpath" includeantruntime="false">
+            <compilerarg value="-Xlint:unchecked"/>
+        </javac>
+        <copy todir="${i5phpbridgeweb.dir}">
+            <fileset dir="${web.dir}">
+                <include name="**/*.xml"/>
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${i5phpbridgemeta.dir}">
+            <fileset dir="${meta.dir}">
+                <include name="**/*.xml"/>
+                <include name="**/*.properties"/>
+            </fileset>
+        </copy>
+        <copy todir="${i5phpbridge.dir}">
+            <fileset dir="${jsp.dir}">
+                <include name="**/*.jsp"/>
+                <include name="**/*.html"/>
+                <include name="**/*.class"/>
+            </fileset>
+        </copy>
+    </target>
+
+    <target name="prodcopy">
+        <copy todir="${classes.dir}">
+            <fileset dir="${prod.dir}"/>
+        </copy>
+    </target>
+    <target name="testcopy">
+        <copy todir="${classes.dir}">
+            <fileset dir="${test.dir}"/>
+        </copy>
+    </target>
+
+    <target name="war">
+        <mkdir dir="${war.dir}"/>
+        <war destfile="${war.dir}/${ant.project.name}.war" 
+            webxml="${i5phpbridgeweb.dir}/web.xml" 
+            basedir="${i5phpbridge.dir}">
+            <lib dir="${lib.dir}">
+                <exclude name="*tomcat-servlet*" />
+            </lib>
+            <metainf file="${meta.dir}/context.xml" />
+        </war>
+    </target>
+
+    <target name="main" depends="clean,compile,testcopy,war"/>
+    <target name="production" depends="clean,compile,prodcopy,war"/>
+    <target name="test" depends="clean,compile,testcopy,war"/>
+
+</project>

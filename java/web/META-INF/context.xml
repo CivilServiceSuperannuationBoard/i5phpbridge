@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <Resource
+        name="jdbc/alpha"
+        auth="Container"
+        type="javax.sql.DataSource"
+        maxActive="20"
+        maxIdle="30"
+        maxWait="30000"
+        username="alphaUsername"
+        password="alphaPassword"
+        driverClassName="com.ibm.as400.access.AS400JDBCDriver"
+        poolPreparedStatements="true"
+        testOnBorrow="true"
+        testWhileIdle="true"
+        removeAbandoned="true"
+        removeAbandonedTimeout="60"
+        logAbandoned="true" 
+        url="jdbc:as400://alpha400;extendedDynamic=true;package=alpha;packageCache=true;packageCriteria=select"/>
+    <Resource
+        name="jdbc/beta"
+        auth="Container"
+        type="javax.sql.DataSource"
+        maxActive="20"
+        maxIdle="30"
+        maxWait="30000"
+        username="betaUsername"
+        password="betaPassword"
+        driverClassName="com.ibm.as400.access.AS400JDBCDriver"
+        poolPreparedStatements="true"
+        testOnBorrow="true"
+        testWhileIdle="true"
+        removeAbandoned="true"
+        removeAbandonedTimeout="60"
+        logAbandoned="true"
+        url="jdbc:as400://beta400;extendedDynamic=true;package=beta;packageCache=true;packageCriteria=select"/>
+</Context>
